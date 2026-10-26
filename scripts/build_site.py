@@ -312,8 +312,7 @@ def render_facts(facts: list[tuple[str, str]], groups: list[dict]) -> str:
     return f'<div class="facts">{"".join(blocks)}</div>'
 
 
-def render_home(readme: dict, announcements: list, syllabus: list, rows: list[dict], cfg: dict) -> str:
-    first_sentence = readme["description"].split(". ")[0].rstrip(".") + "."
+def render_home(readme: dict, announcements: list, rows: list[dict], cfg: dict) -> str:
     facts = render_facts(readme["facts"], cfg.get("fact_groups", []))
 
     latest = ""
@@ -342,21 +341,33 @@ def render_home(readme: dict, announcements: list, syllabus: list, rows: list[di
             f'<a class="button" href="{href}">See details</a></section>'
         )
 
-    project = find_section(syllabus, "Understanding")
-    grading = find_section(syllabus, "Grading")
     return (
-        f'<h1>{esc(readme["title"])}</h1><p class="intro">{esc(first_sentence)}</p>'
+        f'<h1>{esc(readme["title"])}</h1>'
+        f'<div class="lede">{md(readme["description"])}'
+        '<p class="lede-link"><a href="#syllabus">Full syllabus →</a></p></div>'
         f'{facts}'
         f'<div class="two-col"><div>{latest}{archive}</div><div>{next_html}</div></div>'
-        f'<section class="card"><h2>About the course</h2>{md(readme["description"])}</section>'
-        f'<section class="card"><h2>Your research project</h2>{md(project)}</section>'
-        f'<section class="card"><h2>Grading</h2>{md(grading)}</section>'
+    )
+
+
+def accordion(title: str, blurb: str, body: str) -> str:
+    return (
+        '<details class="res"><summary>'
+        f'<span class="res-title">{esc(title)}</span><span class="res-blurb">{esc(blurb)}</span></summary>'
+        f'<div class="card doc res-body">{body}</div></details>'
     )
 
 
 def render_resources(syllabus: list, cfg: dict) -> str:
+    project = find_section(syllabus, "Understanding")
     guide = find_section(syllabus, "How to choose a project")
-    blocks = []
+    rows = [
+        accordion(
+            "Choosing a project",
+            "Your research project and how to scope it.",
+            f"<h3>Your research project</h3>{md(project)}<h3>How to choose a project?</h3>{md(guide)}",
+        )
+    ]
     for sec in cfg.get("resources", []):
         links = sec.get("links") or []
         if links:
@@ -367,15 +378,19 @@ def render_resources(syllabus: list, cfg: dict) -> str:
             body = "<ul>" + "".join(items) + "</ul>"
         else:
             body = '<p class="pending">Curated links coming soon.</p>'
-        blocks.append(
-            f'<section class="card"><h3>{esc(sec["title"])}</h3>'
-            f'<p class="muted">{esc(sec.get("blurb", ""))}</p>{body}</section>'
-        )
+        rows.append(accordion(sec["title"], sec.get("blurb", ""), body))
     return (
         '<h1>Resources</h1>'
         '<p class="intro">Guidance for your project, plus curated links and references.</p>'
-        f'<section class="card"><h2>Choosing a project</h2>{md(guide)}</section>'
-        f'<div class="grid-2">{"".join(blocks)}</div>'
+        f'<div class="accordion">{"".join(rows)}</div>'
+    )
+
+
+def render_syllabus() -> str:
+    text = (ROOT / "syllabus.md").read_text(encoding="utf-8")
+    return (
+        '<p class="back"><a href="#home">← Back to Home</a></p>'
+        f'<article class="card doc syllabus">{md(text)}</article>'
     )
 
 
@@ -484,7 +499,8 @@ def main() -> None:
         "short_title": esc(cfg["short_title"]),
         "css": (SITE / "style.css").read_text(encoding="utf-8"),
         "js": (SITE / "app.js").read_text(encoding="utf-8"),
-        "home": render_home(readme, announcements, syllabus, rows, cfg),
+        "home": render_home(readme, announcements, rows, cfg),
+        "syllabus": render_syllabus(),
         "schedule": render_schedule(rows),
         "resources": render_resources(syllabus, cfg),
         "instructors": render_instructors(syllabus, cfg),
