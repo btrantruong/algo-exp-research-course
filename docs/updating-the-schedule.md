@@ -63,3 +63,28 @@ Then, in `schedule.yml`, delete the placeholder `title:` and `desc:` lines on th
 **Slides:** export the slides as PDF (PowerPoint/Keynote: *Export as PDF*), then use
 **Add file → Upload files** to put `NN.pdf` in the `slides/` folder. Add `slides: 04.pdf` to the lecture's `lecture.yml`.
 The slides appear on the site the day after the lecture. Add `hide: true` to keep them off the site.
+
+## Curated links (Resources tab)
+
+The links on the Resources tab live in [`site/site.yml`](../site/site.yml), under `resources:`.
+Edit and commit it the same way as `schedule.yml`. Each section has a `title`, a one-line `blurb`, and a list of `links`.
+A section with `links: []` shows "Curated links coming soon".
+
+**Add links:** replace `links: []` with a list. `label` and `url` are required; `note` is optional and appears after the link.
+
+```yaml
+  - title: Readings
+    blurb: Papers and background reading for the lectures.
+    links:
+      - label: Author (2024), Paper title
+        url: https://example.org/paper
+        note: Read before lecture 2
+      - label: Another link
+        url: https://example.org/other
+```
+
+- Add one `- label: …` block per link, indented under `links:`. Delete a block to remove a link.
+- Put a `label` in quotes if it contains a colon: `label: "Part 1: Basics"`.
+- **Add a section:** copy a whole `- title: …` block and change the text. Sections appear in the order they are listed.
+- **Remove a section:** delete its whole block.
+- "Choosing a project" is not in this file. It comes from [`syllabus.md`](../syllabus.md).
