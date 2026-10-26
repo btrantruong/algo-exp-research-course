@@ -5,10 +5,10 @@ Build the course site into build/index.html (one self-contained page).
 Sources
     README.md           title, key facts, course description
     announcements.md    newest-first list of `##` sections
-    syllabus.md         instructor bios, project description, grading, project guide
+    syllabus.md         project description, grading, project guide (also rendered as #syllabus)
     schedule.yml        calendar skeleton (one row per event)
     lectures/NN/lecture.yml   lecture content, merged into schedule rows by lecture number
-    site/site.yml       instructor links, resource sections
+    site/site.yml       instructor bios and links, resource sections
     site/template.html, site/style.css, site/app.js
 
 Lecture materials (demos + slides) are published only the day after the lecture
@@ -16,10 +16,7 @@ date, and never when the lecture has `hide: true`. Unreleased files are not copi
 into build/.
 
 Usage
-    .venv/bin/python scripts/build_site.py [--today YYYY-MM-DD] [--write-syllabus] [--strict]
-
---write-syllabus regenerates the overview table in syllabus.md from schedule.yml.
---strict (used in CI) fails the build if that table is out of date.
+    .venv/bin/python scripts/build_site.py [--today YYYY-MM-DD]
 """
 
 from __future__ import annotations
@@ -282,11 +279,13 @@ def render_schedule(rows: list[dict]) -> str:
         '<h1>Schedule</h1>'
         '<p class="intro">Sessions are on Thursdays, 15:50–17:20. Slides and demos are posted '
         "after each session. Dates are tentative.</p>"
+        '<p class="intro">Semester 1 introduces algorithmic curation and experimental research. '
+        "Alongside the lectures, students develop research questions, study designs, and materials. "
+        "Semester 2 focuses on running studies, analyzing data, and interpreting and presenting results.</p>"
         '<div class="timeline-head" aria-hidden="true"><span>Date</span><span>Session</span>'
         "<span>Milestone</span></div>"
         f'<ol class="timeline">{"".join(render_row(r) for r in rows)}</ol>'
-        '<p class="footer-note">Semester 2 (running the study, analysis, final presentation) '
-        "will be scheduled later.</p>"
+        '<p class="footer-note">The Semester 2 schedule will be added later.</p>'
     )
 
 
@@ -394,14 +393,10 @@ def render_syllabus() -> str:
     )
 
 
-def render_instructors(syllabus: list, cfg: dict) -> str:
-    bios = [p.strip() for p in find_section(syllabus, "Instructors").split("\n\n") if p.strip()]
+def render_instructors(cfg: dict) -> str:
     cards = []
     for person in cfg.get("instructors", []):
         name = person["name"]
-        bio = next((b for b in bios if b.startswith(name)), "")
-        if not bio:
-            print(f"warning: no bio for {name} in syllabus.md", file=sys.stderr)
         initials = "".join(w[0] for w in name.split()[:2] if w[0].isalpha())
         links = "".join(
             f'<a class="button ghost" href="{esc(l["url"])}">{esc(l["label"])} ↗</a>'
@@ -409,7 +404,7 @@ def render_instructors(syllabus: list, cfg: dict) -> str:
         )
         cards.append(
             f'<article class="card person"><div class="avatar" aria-hidden="true">{esc(initials)}</div>'
-            f"<div><h2>{esc(name)}</h2><p>{esc(bio)}</p><div class=\"links\">{links}</div></div></article>"
+            f"<div><h2>{esc(name)}</h2><p>{esc(person.get('bio', ''))}</p><div class=\"links\">{links}</div></div></article>"
         )
     return (
         '<h1>Instructors</h1>'
@@ -417,68 +412,11 @@ def render_instructors(syllabus: list, cfg: dict) -> str:
     )
 
 
-# ---------------------------------------------------------------- syllabus table
-
-TABLE_START = "<!-- SCHEDULE_TABLE_START -->"
-TABLE_END = "<!-- SCHEDULE_TABLE_END -->"
-
-
-def dmy(d: dt.date) -> str:
-    return f"{d.day:02d}.{d.month:02d}.{d.year}"
-
-
-def syllabus_table(rows: list[dict]) -> str:
-    """Overview table: consecutive rows sharing a `group` collapse into one line."""
-    items = [r for r in rows if r["type"] != "break"]
-    lines = ["| Dates | Lead | Focus |", "|---|---|---|"]
-    i = 0
-    while i < len(items):
-        j = i
-        while j + 1 < len(items) and items[i].get("group") and items[j + 1].get("group") == items[i]["group"]:
-            j += 1
-        block = items[i : j + 1]
-        first, last = block[0], block[-1]
-        focus = next(
-            (r["focus"] for r in block if r.get("focus")),
-            first["title"] or first.get("milestone", ""),
-        )
-        start, end = first["date"], last["last"]
-        dates = dmy(start) if start == end else f"{dmy(start)} – {dmy(end)}"
-        if len(block) == 1 and first.get("note"):
-            dates += f" ({first['note']})"
-        lines.append(f"| {dates} | {first.get('lead', '/')} | {focus} |")
-        for r in block:
-            if r.get("milestone") and r["milestone"] not in focus:
-                lines.append(f"| {dmy(r['date'])} | {r.get('lead', '/')} | {r['milestone']} |")
-        i = j + 1
-    return "\n".join(lines)
-
-
-def sync_syllabus(rows: list[dict], write: bool, strict: bool) -> None:
-    path = ROOT / "syllabus.md"
-    text = path.read_text(encoding="utf-8")
-    pattern = re.compile(re.escape(TABLE_START) + r".*?" + re.escape(TABLE_END), re.DOTALL)
-    if not pattern.search(text):
-        sys.exit(f"syllabus.md: {TABLE_START} / {TABLE_END} markers not found")
-    updated = pattern.sub(lambda _: f"{TABLE_START}\n{syllabus_table(rows)}\n{TABLE_END}", text)
-    if updated == text:
-        return
-    if write:
-        path.write_text(updated, encoding="utf-8")
-        print("syllabus.md schedule table updated")
-    elif strict:
-        sys.exit("syllabus.md schedule table is out of date: run scripts/build_site.py --write-syllabus")
-    else:
-        print("warning: syllabus.md schedule table is out of date (use --write-syllabus)", file=sys.stderr)
-
-
 # ---------------------------------------------------------------- main
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--today", help="override today's date (YYYY-MM-DD), for previews")
-    parser.add_argument("--write-syllabus", action="store_true", help="regenerate the table in syllabus.md")
-    parser.add_argument("--strict", action="store_true", help="fail if syllabus.md is out of date (CI)")
     args = parser.parse_args()
     today = dt.date.fromisoformat(args.today) if args.today else dt.date.today()
 
@@ -487,7 +425,6 @@ def main() -> None:
     announcements = read_announcements()
     syllabus = sections((ROOT / "syllabus.md").read_text(encoding="utf-8"))
     rows = read_schedule(today)
-    sync_syllabus(rows, args.write_syllabus, args.strict)
 
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -503,7 +440,7 @@ def main() -> None:
         "syllabus": render_syllabus(),
         "schedule": render_schedule(rows),
         "resources": render_resources(syllabus, cfg),
-        "instructors": render_instructors(syllabus, cfg),
+        "instructors": render_instructors(cfg),
         "repo": esc(cfg["repo"]),
         "built": fmt_date(today),
     }

@@ -30,6 +30,7 @@ h3 { margin-bottom:.35rem; font-size:1.02rem; letter-spacing:-.01em; }
 .lede { max-width:780px; margin-bottom:1.8rem; color:var(--muted); font-size:1.02rem; line-height:1.65; }
 .lede p { margin-bottom:.8rem; }
 .lede .lede-link { margin:.2rem 0 0; font-weight:700; }
+.intro + .intro { margin-top:-1rem; }
 .intro { max-width:720px; margin-bottom:1.8rem; color:var(--muted); font-size:clamp(1rem,1.8vw,1.18rem); }
 .muted { color:var(--muted); }
 .pending { color:var(--muted); font-style:italic; font-size:.92rem; }
@@ -63,7 +64,7 @@ h3 { margin-bottom:.35rem; font-size:1.02rem; letter-spacing:-.01em; }
 .res { border-top:1px solid var(--line); }
 .res summary { display:flex; flex-wrap:wrap; align-items:baseline; gap:.2rem 1.2rem; padding:1.1rem 0; cursor:pointer; list-style:none; }
 .res summary::-webkit-details-marker { display:none; }
-.res summary::before { content:"▸"; flex:none; width:1rem; font-size:1.1rem; line-height:1; color:var(--coral); transition:transform .15s; }
+.res summary::before { content:""; flex:none; align-self:center; width:0; height:0; margin:0 .35rem 0 .2rem; border-left:.8rem solid var(--coral); border-top:.55rem solid transparent; border-bottom:.55rem solid transparent; transition:transform .15s; }
 .res[open] summary::before { transform:rotate(90deg); }
 .res-title { font-size:1.12rem; font-weight:800; letter-spacing:-.02em; }
 .res-blurb { color:var(--muted); font-size:.92rem; }
