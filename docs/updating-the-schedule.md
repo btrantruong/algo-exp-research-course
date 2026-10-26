@@ -7,8 +7,20 @@ The Schedule tab on the course site is built from one file: [`schedule.yml`](../
 1. Open [`schedule.yml`](../schedule.yml) on GitHub and click the **pencil icon** (top right).
 2. Make your change.
 3. Click **Commit changes…** and commit directly to `main`.
-4. The site updates in about 2 minutes. Check the **Actions** tab: a green ✓ means it is live.
-   A red ✗ means there is a typo; the old site stays up. Open the run to see the error, then fix the file.
+4. The site redeploys automatically (see below).
+
+## How the site redeploys
+
+- **What triggers it:** any commit to `main`, whether you edit on GitHub or merge a pull request.
+  If you edit on a branch, nothing changes until the branch is merged.
+- **How long it takes:** about 2 minutes. Open the **Actions** tab and look for "Deploy course site":
+  a green ✓ means it is live. A red ✗ means the build failed (usually a typo) and the old site stays up.
+  Open the run to see the error, then fix the file.
+- **Daily rebuild:** the site also rebuilds by itself every day at about 03:00 UTC.
+  That is how slides and demos appear the morning after a lecture, even if nobody edits anything.
+- **If the page looks unchanged:** hard-refresh (Cmd/Ctrl+Shift+R) or open a private window,
+  because browsers cache the page. If the run is green and it still looks old, tell Bao.
+- **Redeploy by hand (optional):** Actions → "Deploy course site" → **Run workflow**. This needs write access.
 
 ## One row
 
