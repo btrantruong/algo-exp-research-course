@@ -13,6 +13,7 @@ Over two semesters, students in groups of 3-4 will develop and conduct an experi
 ## Schedule
 
 See the [course schedule](https://btrantruong.github.io/algo-exp-research-course/#schedule) for dates, lectures, and deadlines.
+Students are expected to spend 4–6 h/week outside of lecture time. 
 
 ## Grading 
 **First semester concludes with fully developed Introduction and Methods sections of the research report.**

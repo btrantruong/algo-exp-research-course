@@ -280,7 +280,7 @@ def render_schedule(rows: list[dict]) -> str:
         '<h1>Schedule</h1>'
         '<p class="intro">The schedule will be adjusted as we go, so please check it regularly for '
         "updates. Slides and demos are posted after each session.</p>"
-        '<p class="intro"><strong>Note:</strong> Reading assignments should be completed before class. '
+        '<p class="intro"><strong>Note:</strong> Students are expected to spend 4–6 h/week outside of lecture time. Reading assignments should be completed before class. '
         "These won’t be graded but there may be a quiz on the reading material, and students are "
         "expected to participate in class discussions about the materials.</p>"
         '<div class="timeline-head" aria-hidden="true"><span>Date</span><span>Session</span>'
