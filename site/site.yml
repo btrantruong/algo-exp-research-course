@@ -12,15 +12,11 @@ instructors:
   - name: Kamil Fuławka
     bio: >-
       Kamil Fuławka is a computational psychologist who studies decision-making. His research examines the adaptive and maladaptive roles of emotions and heuristics, as well as the dynamics of decision processes. His work combines computational modeling, behavioral and process-tracing experiments, and automated analysis of subjective reports using large language models.
-    links:
-      - label: Personal page
-        url: https://synosys.github.io/team/kamil-fulawka/
+    url: https://synosys.github.io/team/kamil-fulawka/
   - name: Bao T. Truong
     bio: >-
       Bao T. Truong is trained in network science and informatics and studies how digital platforms shape people’s information environments: what they see, how they interpret it, and how they can influence it. Her work examines how ranking, labels, feedback signals, user controls, and community-based context affect attention, trust, sharing, and decision-making.
-    links:
-      - label: Website
-        url: https://btrantruong.github.io
+    url: https://btrantruong.github.io
 
 # Curated links go here. A section without links shows a "coming soon" note.
 resources:

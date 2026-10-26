@@ -131,7 +131,8 @@ h3 { margin-bottom:.35rem; font-size:1.02rem; letter-spacing:-.01em; }
 .people { margin-top:1.6rem; }
 .person { display:grid; grid-template-columns:auto minmax(0,1fr); gap:1.3rem; padding:1.6rem 0; }
 .avatar { display:grid; place-items:center; width:4.2rem; height:4.2rem; border-radius:50%; color:#fff; background:linear-gradient(135deg,var(--teal),#2a9d8f); font-size:1.4rem; font-weight:800; }
-.person .links { display:flex; flex-wrap:wrap; gap:.5rem; }
+.person h2 a { color:inherit; text-decoration-color:var(--coral); text-decoration-thickness:2px; }
+.person h2 a:hover { color:var(--teal-deep); }
 @media (max-width:560px) { .person { grid-template-columns:1fr; } }
 
 .footer-note { margin-top:1.4rem; color:var(--muted); font-size:.88rem; }
