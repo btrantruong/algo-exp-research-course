@@ -1,5 +1,12 @@
-short_title: Algorithmic Curation Seminar
+short_title: Understanding Algorithmic Curation Through Experimentation
 repo: https://github.com/btrantruong/algo-exp-research-course
+
+# Key facts from the README table, grouped for display.
+fact_groups:
+  - title: Course
+    items: [Instructor, Language, Assessment]
+  - title: Meetings
+    items: [Time, Location, Duration]
 
 # Bios come from syllabus.md (## Instructors); links are matched by name.
 instructors:

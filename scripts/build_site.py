@@ -177,7 +177,8 @@ def publish_materials(row: dict) -> list[tuple[str, str, str]]:
         dst = OUT / "lectures" / n / m["file"]
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
-        links.append((m["label"], f"lectures/{n}/{m['file']}", m.get("desc", "")))
+        if m.get("listed", True):
+            links.append((m["label"], f"lectures/{n}/{m['file']}", m.get("desc", "")))
 
     slides = lec.get("slides") or []
     for name in [slides] if isinstance(slides, str) else slides:
@@ -278,7 +279,7 @@ def render_row(row: dict) -> str:
 
 def render_schedule(rows: list[dict]) -> str:
     return (
-        '<p class="eyebrow">Semester 1</p><h1>Schedule</h1>'
+        '<h1>Schedule</h1>'
         '<p class="intro">Sessions are on Thursdays, 15:50–17:20. Slides and demos are posted '
         "after each session. Dates are tentative.</p>"
         '<div class="timeline-head" aria-hidden="true"><span>Date</span><span>Session</span>'
@@ -291,13 +292,29 @@ def render_schedule(rows: list[dict]) -> str:
 
 # ---------------------------------------------------------------- render: other tabs
 
-def render_home(readme: dict, announcements: list, syllabus: list, rows: list[dict]) -> str:
+def render_facts(facts: list[tuple[str, str]], groups: list[dict]) -> str:
+    """Key facts from the README table, arranged in the groups named in site.yml."""
+    values = dict(facts)
+    used: set[str] = set()
+    blocks = []
+    for group in groups:
+        items = []
+        for key in group["items"]:
+            if key not in values:
+                print(f"warning: fact '{key}' not found in README.md", file=sys.stderr)
+                continue
+            used.add(key)
+            items.append(f"<dt>{esc(key)}</dt><dd>{md_inline(values[key])}</dd>")
+        blocks.append(f'<div class="fact-group"><h2>{esc(group["title"])}</h2><dl>{"".join(items)}</dl></div>')
+    leftover = [k for k, _ in facts if k not in used]
+    if leftover:
+        print(f"warning: facts not in any group: {leftover}", file=sys.stderr)
+    return f'<div class="facts">{"".join(blocks)}</div>'
+
+
+def render_home(readme: dict, announcements: list, syllabus: list, rows: list[dict], cfg: dict) -> str:
     first_sentence = readme["description"].split(". ")[0].rstrip(".") + "."
-    facts = "".join(
-        f'<div class="fact"><span class="fact-label">{esc(k)}</span>'
-        f'<span class="fact-value">{md_inline(v)}</span></div>'
-        for k, v in readme["facts"]
-    )
+    facts = render_facts(readme["facts"], cfg.get("fact_groups", []))
 
     latest = ""
     if announcements:
@@ -328,9 +345,8 @@ def render_home(readme: dict, announcements: list, syllabus: list, rows: list[di
     project = find_section(syllabus, "Understanding")
     grading = find_section(syllabus, "Grading")
     return (
-        '<p class="eyebrow">Practical seminar · two semesters</p>'
         f'<h1>{esc(readme["title"])}</h1><p class="intro">{esc(first_sentence)}</p>'
-        f'<div class="facts">{facts}</div>'
+        f'{facts}'
         f'<div class="two-col"><div>{latest}{archive}</div><div>{next_html}</div></div>'
         f'<section class="card"><h2>About the course</h2>{md(readme["description"])}</section>'
         f'<section class="card"><h2>Your research project</h2>{md(project)}</section>'
@@ -356,7 +372,7 @@ def render_resources(syllabus: list, cfg: dict) -> str:
             f'<p class="muted">{esc(sec.get("blurb", ""))}</p>{body}</section>'
         )
     return (
-        '<p class="eyebrow">Course materials</p><h1>Resources</h1>'
+        '<h1>Resources</h1>'
         '<p class="intro">Guidance for your project, plus curated links and references.</p>'
         f'<section class="card"><h2>Choosing a project</h2>{md(guide)}</section>'
         f'<div class="grid-2">{"".join(blocks)}</div>'
@@ -381,7 +397,7 @@ def render_instructors(syllabus: list, cfg: dict) -> str:
             f"<div><h2>{esc(name)}</h2><p>{esc(bio)}</p><div class=\"links\">{links}</div></div></article>"
         )
     return (
-        '<p class="eyebrow">Teaching team</p><h1>Instructors</h1>'
+        '<h1>Instructors</h1>'
         f'<div class="people">{"".join(cards)}</div>'
     )
 
@@ -464,11 +480,11 @@ def main() -> None:
 
     page = (SITE / "template.html").read_text(encoding="utf-8")
     values = {
-        "page_title": f"{cfg['short_title']} — {readme['title']}",
+        "page_title": cfg["short_title"],
         "short_title": esc(cfg["short_title"]),
         "css": (SITE / "style.css").read_text(encoding="utf-8"),
         "js": (SITE / "app.js").read_text(encoding="utf-8"),
-        "home": render_home(readme, announcements, syllabus, rows),
+        "home": render_home(readme, announcements, syllabus, rows, cfg),
         "schedule": render_schedule(rows),
         "resources": render_resources(syllabus, cfg),
         "instructors": render_instructors(syllabus, cfg),
