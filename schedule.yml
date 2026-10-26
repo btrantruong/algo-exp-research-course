@@ -33,12 +33,12 @@ rows:
   - date: 2026-11-05
     type: lecture
     lecture: 3
+    milestone: Form groups
     lead: Bao
 
   - date: 2026-11-12
     type: lecture
     lecture: 4
-    milestone: Form groups
     lead: Kamil
     title: Experiments & operationalization
     desc: Specific topic to be announced.
