@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| **Instructor** | Dr. Kamil Fuławka & Dr. Bao T. Truong |
+| **Instructor** | [Dr. Kamil Fuławka](https://synosys.github.io/team/kamil-fulawka/) & [Dr. Bao T. Truong](https://btrantruong.github.io) |
 | **Time** | Thursdays, 14:50-16:20 |
 | **Language** | English |
-| **Duration** | Two semesters · Semester 1 from 15.10.2026 - 28.01.2027 | 
+| **Duration** | 15.10.2026 - 15.03.2027 |
 | **Location** | BZW/A255 (default) or on Zoom (TBA in previous week) |
 | **Assessment** | Presentation & Research write-up |
 
@@ -16,9 +16,9 @@ This practical seminar focuses on the impact of algorithmic curation, with a par
 ## Latest Announcement
 
 <!-- LATEST_ANNOUNCEMENT_START -->
-> **Lecture 1 (22.10.2026) - Intro to algorithmically curated feeds**
+> **Lecture 2 (29.10.2026) - Problem space & research on social media algorithmic curation**
 >
 >
-> - This lecture will be held **on Zoom** (link can be found in my announcement email)
-> - Please read the [full syllabus](https://btrantruong.github.io/algo-exp-research-course/#syllabus). 
+> - This lecture will be held **in person** 
+> - Please complete the [homework (see page 10)](https://btrantruong.github.io/algo-exp-research-course/slides/01.pdf) before class. 
 <!-- LATEST_ANNOUNCEMENT_END -->

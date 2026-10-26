@@ -278,11 +278,11 @@ def render_row(row: dict) -> str:
 def render_schedule(rows: list[dict]) -> str:
     return (
         '<h1>Schedule</h1>'
-        '<p class="intro">Sessions are on Thursdays, 15:50–17:20. Slides and demos are posted '
-        "after each session. Dates are tentative.</p>"
-        '<p class="intro">Semester 1 introduces algorithmic curation and experimental research. '
-        "Alongside the lectures, students develop research questions, study designs, and materials. "
-        "Semester 2 focuses on running studies, analyzing data, and interpreting and presenting results.</p>"
+        '<p class="intro">The schedule will be adjusted as we go, so please check it regularly for '
+        "updates. Slides and demos are posted after each session.</p>"
+        '<p class="intro"><strong>Note:</strong> Reading assignments should be completed before class. '
+        "These won’t be graded but there may be a quiz on the reading material, and students are "
+        "expected to participate in class discussions about the materials.</p>"
         '<div class="timeline-head" aria-hidden="true"><span>Date</span><span>Session</span>'
         "<span>Milestone</span></div>"
         f'<ol class="timeline">{"".join(render_row(r) for r in rows)}</ol>'
@@ -399,13 +399,10 @@ def render_instructors(cfg: dict) -> str:
     for person in cfg.get("instructors", []):
         name = person["name"]
         initials = "".join(w[0] for w in name.split()[:2] if w[0].isalpha())
-        links = "".join(
-            f'<a class="button ghost" href="{esc(l["url"])}">{esc(l["label"])} ↗</a>'
-            for l in person.get("links", [])
-        )
+        heading = f'<a href="{esc(person["url"])}">{esc(name)}</a>' if person.get("url") else esc(name)
         cards.append(
             f'<article class="card person"><div class="avatar" aria-hidden="true">{esc(initials)}</div>'
-            f"<div><h2>{esc(name)}</h2><p>{esc(person.get('bio', ''))}</p><div class=\"links\">{links}</div></div></article>"
+            f"<div><h2>{heading}</h2><p>{esc(person.get('bio', ''))}</p></div></article>"
         )
     return (
         '<h1>Instructors</h1>'
