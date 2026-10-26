@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An offline classroom visualization of a simple learned feed-ranking model.">
+  <title>Feed Ranking Lab — Learned Predictions</title>
+  <style>
+    :root { --ink:#10263a; --muted:#5c7184; --paper:#f8fbfd; --card:#fff; --line:#d9e5ec; --teal:#006d77; --teal-deep:#004f57; --teal-soft:#dff3f1; --coral:#e76f51; --gold:#f4a261; --gold-soft:#fff5e7; --shadow:0 16px 45px rgba(16,38,58,.10); }
+    * { box-sizing:border-box; }
+    html { color-scheme:light; }
+    body { min-width:320px; margin:0; color:var(--ink); background:radial-gradient(circle at 6% 0%,rgba(42,157,143,.15),transparent 29rem),radial-gradient(circle at 100% 19%,rgba(244,162,97,.15),transparent 25rem),var(--paper); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
+    .shell { width:min(1120px,calc(100% - 2rem)); margin:0 auto; padding:clamp(2rem,5vw,4.75rem) 0; }
+    .eyebrow { display:inline-flex; align-items:center; gap:.5rem; margin:0 0 .9rem; color:var(--teal-deep); font-size:.78rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .eyebrow::before { width:.65rem; height:.65rem; border-radius:50%; background:var(--coral); content:""; }
+    h1,h2,p { margin-top:0; }
+    h1 { max-width:800px; margin-bottom:.75rem; font-size:clamp(1.4rem,2vw,1.8rem); letter-spacing:-.055em; line-height:.98; }
+    .intro { max-width:735px; margin-bottom:clamp(2rem,4vw,3.25rem); color:var(--muted); font-size:clamp(1rem,1.8vw,1.18rem); }
+    .learning-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:1.25rem; align-items:start; }
+    .panel { min-height:100%; overflow:hidden; border:1px solid var(--line); border-radius:1.25rem; background:rgba(255,255,255,.9); box-shadow:var(--shadow); }
+    .panel-heading { padding:1.4rem clamp(1.25rem,3vw,2rem) 1rem; border-bottom:1px solid var(--line); }
+    .panel-heading h2 { margin-bottom:.32rem; font-size:1.25rem; letter-spacing:-.025em; }
+    .panel-heading p { margin:0; color:var(--muted); font-size:.9rem; }
+    figure { margin:0; }
+    .plot-wrap { padding:1.1rem 1rem .4rem; }
+    .plot { display:block; width:100%; height:auto; overflow:visible; }
+    .plot text { fill:var(--muted); font-family:inherit; font-size:11px; }
+    .plot .axis { stroke:#95aab9; stroke-width:1.25; }
+    .plot .grid { stroke:#e5edf2; stroke-width:1; }
+    .plot .trend-low { fill:none; stroke:#8196a5; stroke-width:3; stroke-linecap:round; }
+    .plot .trend-high { fill:none; stroke:var(--teal); stroke-width:3.5; stroke-linecap:round; }
+    .plot .annotation { fill:var(--teal-deep); font-size:10px; font-weight:800; }
+    .plot .point-followed { fill:var(--teal); stroke:var(--teal-deep); stroke-width:1.5; }
+    .plot .point-new { fill:#fff; stroke:#607989; stroke-width:2; }
+    .plot .point-match { rx:2; }
+    .plot .point-mismatch { stroke-width:2.5; }
+    .legend { display:flex; flex-wrap:wrap; gap:.5rem 1rem; padding:0 1.4rem .85rem; color:var(--muted); font-size:.75rem; }
+    .legend-item { display:inline-flex; align-items:center; gap:.35rem; }
+    .legend-mark { display:inline-block; width:.72rem; height:.72rem; border:2px solid #607989; border-radius:50%; background:#fff; }
+    .legend-mark.followed { border-color:var(--teal-deep); background:var(--teal); }
+    .legend-mark.match { border-radius:1px; transform:rotate(45deg); }
+    figcaption { padding:0 1.4rem 1.3rem; color:var(--muted); font-size:.82rem; }
+    .model-copy { padding:1.15rem clamp(1.25rem,3vw,1.5rem) .7rem; color:var(--muted); font-size:.88rem; }
+    .model-copy strong { color:var(--teal-deep); }
+    .coefs { display:grid; gap:.85rem; padding:0 clamp(1.25rem,3vw,1.5rem) 1rem; margin:0; list-style:none; }
+    .coef-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.35rem .8rem; align-items:end; }
+    .coef-row span { color:var(--ink); font-size:.83rem; font-weight:750; }
+    .coef-row strong { color:var(--teal-deep); font-size:.86rem; }
+    .bar-track { grid-column:1 / -1; height:.45rem; overflow:hidden; border-radius:999px; background:#edf2f5; }
+    .bar { display:block; height:100%; border-radius:inherit; background:var(--teal); }
+    .bar.topic { width:100%; }
+    .bar.followed { width:77%; background:#2a9d8f; }
+    .bar.likes { width:26%; background:var(--gold); }
+    .formula { margin:1rem clamp(1.25rem,3vw,1.5rem); padding:.7rem .8rem; border-radius:.65rem; color:var(--teal-deep); background:#e8f6f4; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.78rem; font-weight:700; line-height:1.55; }
+    .predictions { display:grid; grid-template-columns:1fr 1fr; gap:.65rem; padding:0 clamp(1.25rem,3vw,1.5rem) 1.35rem; }
+    .prediction { padding:.8rem; border:1px solid var(--line); border-radius:.75rem; background:var(--card); }
+    .prediction-label { margin:0 0 .2rem; color:var(--muted); font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .prediction-value { margin:0; color:var(--teal-deep); font-size:1.45rem; font-weight:850; letter-spacing:-.05em; }
+    .prediction-detail { margin:.2rem 0 0; color:var(--muted); font-size:.74rem; }
+    .footer-note { margin:1.3rem 0 0; color:var(--muted); font-size:.82rem; text-align:center; }
+    .footer-note a { color:var(--teal-deep); font-weight:800; }
+    .lesson-nav { display:flex; flex-wrap:wrap; gap:.45rem; margin:0 0 1.5rem; }
+    .lesson-nav a { padding:.3rem .55rem; border:1px solid var(--line); border-radius:999px; color:var(--teal-deep); background:rgba(255,255,255,.72); font-size:.76rem; font-weight:800; text-decoration:none; }
+    .lesson-nav a[aria-current="page"] { border-color:var(--teal); color:#fff; background:var(--teal); }
+    .lesson-nav a:focus-visible { outline:3px solid rgba(231,111,81,.55); outline-offset:3px; }
+    @media (max-width:780px) { .learning-grid { grid-template-columns:1fr; } }
+    @media (max-width:420px) { .shell { width:min(100% - 1.15rem,1120px); } .predictions { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="lesson-nav" aria-label="Lesson pages">
+      <a href="feed-ranking-demo.html">1. Ranking</a>
+      <a href="feed-ranking-consequences.html">2. Features</a>
+      <a href="feed-ranking-model.html" aria-current="page">3. Predictions</a>
+    </nav>
+    <p class="eyebrow">Classroom interactive · Part 3</p>
+    <h1>Where does machine learning enter?</h1>
+    <p class="intro">Some information can be observed directly (e.g., following). Others are not, and must be estimated from earlier examples. These include post features, such as emotionality or constructiveness, and a user’s future reaction—whether the person will like the next post.</p>
+
+    <section class="learning-grid" aria-label="Visual explanation of a learned linear model">
+      <section class="panel" aria-labelledby="history-title">
+        <div class="panel-heading">
+          <h2 id="history-title">Past examples: observed data</h2>
+          <p>Each point is an earlier post whose outcome is now known.</p>
+        </div>
+        <figure>
+          <div class="plot-wrap">
+            <svg class="plot" viewBox="0 0 460 300" role="img" aria-labelledby="history-plot-title history-plot-desc">
+              <title id="history-plot-title">Synthetic interaction history scatter plot</title>
+              <desc id="history-plot-desc">Global likes are on the horizontal axis. The vertical axis shows whether the person liked or skipped a past post. Point fill indicates whether the author was followed, and point shape indicates topic match.</desc>
+              <line class="grid" x1="58" y1="55" x2="430" y2="55" />
+              <line class="grid" x1="58" y1="226" x2="430" y2="226" />
+              <line class="axis" x1="58" y1="245" x2="430" y2="245" />
+              <line class="axis" x1="58" y1="38" x2="58" y2="245" />
+              <text x="10" y="59">Liked</text><text x="4" y="230">Skipped</text>
+              <text x="55" y="265">0</text><text x="128" y="265">2</text><text x="202" y="265">4</text><text x="276" y="265">6</text><text x="350" y="265">8</text><text x="420" y="265">10</text>
+              <text x="186" y="291">Global likes (observed)</text>
+              <g aria-label="Past post 1: 2 likes, author followed, topic match, liked"><title>Post 1: 2 likes, followed author, topic match, liked</title><rect class="point-followed point-match" x="128" y="45" width="14" height="14" transform="rotate(45 135 52)" /></g>
+              <g aria-label="Past post 2: 4 likes, author followed, topic match, liked"><title>Post 2: 4 likes, followed author, topic match, liked</title><rect class="point-followed point-match" x="202" y="55" width="14" height="14" transform="rotate(45 209 62)" /></g>
+              <g aria-label="Past post 3: 5 likes, new author, topic match, liked"><title>Post 3: 5 likes, new author, topic match, liked</title><rect class="point-new point-match" x="239" y="39" width="14" height="14" transform="rotate(45 246 46)" /></g>
+              <g aria-label="Past post 4: 10 likes, new author, topic mismatch, skipped"><title>Post 4: 10 likes, new author, topic mismatch, skipped</title><circle class="point-new point-mismatch" cx="428" cy="223" r="7" /></g>
+              <g aria-label="Past post 5: 8 likes, new author, topic mismatch, skipped"><title>Post 5: 8 likes, new author, topic mismatch, skipped</title><circle class="point-new point-mismatch" cx="354" cy="212" r="7" /></g>
+              <g aria-label="Past post 6: 3 likes, author followed, topic mismatch, liked"><title>Post 6: 3 likes, followed author, topic mismatch, liked</title><circle class="point-followed point-mismatch" cx="172" cy="68" r="7" /></g>
+            </svg>
+          </div>
+          <div class="legend" aria-label="Scatter plot legend">
+            <span class="legend-item"><i class="legend-mark followed" aria-hidden="true"></i>Author followed</span>
+            <span class="legend-item"><i class="legend-mark" aria-hidden="true"></i>New author</span>
+            <span class="legend-item"><i class="legend-mark match" aria-hidden="true"></i>Topic match</span>
+            <span class="legend-item"><i class="legend-mark" aria-hidden="true"></i>Topic mismatch</span>
+          </div>
+          <figcaption>Liked and skipped are observed later. The model uses these outcomes as training examples.</figcaption>
+        </figure>
+      </section>
+
+      <section class="panel" aria-labelledby="model-title">
+        <div class="panel-heading">
+          <h2 id="model-title">What the model estimates</h2>
+          <p>A simple linear model learns a small contribution for each input.</p>
+        </div>
+        <figure>
+          <div class="plot-wrap">
+            <svg class="plot" viewBox="0 0 460 220" role="img" aria-labelledby="model-plot-title model-plot-desc">
+              <title id="model-plot-title">Fitted linear prediction lines</title>
+              <desc id="model-plot-desc">The gray line shows predicted interest for a new author and a topic mismatch. The teal line shows predicted interest for a followed author and a topic match. Both lines rise only slightly as global likes increase.</desc>
+              <line class="grid" x1="58" y1="34" x2="430" y2="34" /><line class="grid" x1="58" y1="140" x2="430" y2="140" /><line class="grid" x1="58" y1="204" x2="430" y2="204" />
+              <line class="axis" x1="58" y1="204" x2="430" y2="204" /><line class="axis" x1="58" y1="25" x2="58" y2="204" />
+              <text x="15" y="38">100</text><text x="23" y="144">50</text><text x="30" y="208">0</text>
+              <text x="55" y="218">0</text><text x="420" y="218">10 likes</text>
+              <path class="trend-low" d="M58 166 L430 149" /><path class="trend-high" d="M58 74 L430 57" />
+              <text x="268" y="50" class="annotation">followed + topic match</text><text x="255" y="177">new author + mismatch</text>
+              <line x1="82" y1="74" x2="82" y2="166" stroke="#f4a261" stroke-width="2" stroke-dasharray="4 4" />
+              <text x="88" y="119" class="annotation">+55 from</text><text x="88" y="132" class="annotation">the two features</text>
+            </svg>
+          </div>
+          <figcaption>Line slope represents the learned contribution of global likes; the vertical shifts represent the learned contributions of the other features.</figcaption>
+        </figure>
+        <p class="model-copy"><strong>Estimated coefficients (β):</strong> these values are not observed in a row. Training estimates them from the past outcomes.</p>
+        <ul class="coefs" aria-label="Illustrative learned coefficient estimates">
+          <li class="coef-row"><span>Topic match</span><strong>+31</strong><div class="bar-track"><i class="bar topic"></i></div></li>
+          <li class="coef-row"><span>Author followed</span><strong>+24</strong><div class="bar-track"><i class="bar followed"></i></div></li>
+          <li class="coef-row"><span>Global likes, 0–10</span><strong>+8</strong><div class="bar-track"><i class="bar likes"></i></div></li>
+        </ul>
+        <p class="formula">predicted interest = 18 + 24(followed) + 31(topic match) + 0.8 × likes</p>
+        <div class="predictions" aria-label="Illustrative predictions for two posts">
+          <article class="prediction"><p class="prediction-label">Post A</p><p class="prediction-value">75 / 100</p><p class="prediction-detail">followed · topic match · 2 likes</p></article>
+          <article class="prediction"><p class="prediction-label">Post C</p><p class="prediction-value">26 / 100</p><p class="prediction-detail">new author · mismatch · 10 likes</p></article>
+        </div>
+      </section>
+    </section>
+    <p class="footer-note">Illustrative data and coefficients. The β values are learned from past outcomes; the earlier <code>w</code> value was a human-selected ranking tradeoff.<br><a href="feed-ranking-consequences.html">← Back to post features</a></p>
+  </main>
+</body>
+</html>

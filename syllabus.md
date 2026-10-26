@@ -20,12 +20,15 @@ Bao T. Truong is trained in network science and informatics and studies how digi
 
 The course runs for two semesters (about four hours per week), with an in-class session every **Thursday**.
 
-**Semester 1 (15.10.2026–04.03.2027)** introduces algorithmic curation and experimental research. Alongside the lectures, students develop research questions, study designs, and materials. 
+**Semester 1 (15.10.2026–28.01.2027)** introduces algorithmic curation and experimental research. Alongside the lectures, students develop research questions, study designs, and materials. From 28.01.2027 to 04.03.2027 students work independently.
 
 **Semester 2** focuses on running studies, analyzing data, and interpreting and presenting results.
 
 ### Semester 1 Schedule (Tentative)
 
+<!-- Generated from schedule.yml by scripts/build_site.py --write-syllabus. Edit schedule.yml, not this table. -->
+
+<!-- SCHEDULE_TABLE_START -->
 | Dates | Lead | Focus |
 |---|---|---|
 | 15.10.2026 | / | Course introduction |
@@ -34,10 +37,12 @@ The course runs for two semesters (about four hours per week), with an in-class 
 | 03.12.2026 | / | Checkpoints and brainstorming; topic and mentor selection; 90-minute group mentoring sessions |
 | 10.12.2026 | / | Presentation of research proposal |
 | 17.12.2026 | / | Optional mentoring session & Submission of Intro draft |
-| 07.01.2027 – 21.01.2027 | / | Mentoring sessions | 
-| 21.01.2027 | / | Submission of Methods draft| 
+| 07.01.2027 – 21.01.2027 | / | Mentoring sessions |
+| 21.01.2027 | / | Submission of Methods draft |
 | 28.01.2027 | / | Presentation of final research proposal |
+| 29.01.2027 – 04.03.2027 | / | Independent working time |
 | 15.03.2027 (TBC in class) | / | Submission of final write-up (Intro & Methods) |
+<!-- SCHEDULE_TABLE_END -->
 
 ### Lectures 1–3: Algorithmic Curation
 
@@ -48,8 +53,7 @@ These lectures provide the domain knowledge to inform students’ research quest
 3. **Literature review** — key studies in the field.
 
 ## Grading 
-**First semester concludes with a fully developed Introduction and Methods sections of the research report. 
-**
+**First semester concludes with fully developed Introduction and Methods sections of the research report.**
 ### Components
 
 | Component | Weight | Graded by |
@@ -64,7 +68,7 @@ A project can contribute through a more realistic/manipulable algorithmic interv
 
 - Intervention depth — Is the algorithmic or design manipulation meaningful and clearly specified?
 - Measurement depth — Does it capture more than one generic attitude item?
-- Explanability — Can the study plausibly identify a causal effect? If everything goes well, does the study design reveal how or why the effect occurred?
+- Explainability — Can the study plausibly identify a causal effect? If everything goes well, does the study design reveal how or why the effect occurred?
 - Feasibility — Can it be built, piloted, run, and analyzed within the course?
 
 ### Choosing a Scope

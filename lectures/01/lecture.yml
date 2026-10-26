@@ -1,0 +1,17 @@
+lecture: 1
+title: What does an algorithmically curated feed do?
+summary: How a ranking objective decides what a feed shows, and what it rewards or suppresses. Hands-on with a simple feed-ranking model.
+# Materials appear on the site automatically the day after the lecture date.
+# Set hide: true to keep them off the site by hand.
+hide: false
+slides: 01.pptx          # file in slides/
+materials:               # files in this folder
+  - file: feed-ranking-demo.html
+    label: Feed Ranking Lab
+    desc: Move the relevance weight and watch the ranking change.
+  - file: feed-ranking-consequences.html
+    label: Post features
+    desc: See which author and emotion features end up near the top.
+  - file: feed-ranking-model.html
+    label: Learned predictions
+    desc: Fit a simple linear model to past interactions.

@@ -1,0 +1,28 @@
+short_title: Algorithmic Curation Seminar
+repo: https://github.com/btrantruong/algo-exp-research-course
+
+# Bios come from syllabus.md (## Instructors); links are matched by name.
+instructors:
+  - name: Kamil Fuławka
+    links:
+      - label: Personal page
+        url: https://synosys.github.io/team/kamil-fulawka/
+  - name: Bao T. Truong
+    links:
+      - label: Website
+        url: https://btrantruong.github.io
+
+# Curated links go here. A section without links shows a "coming soon" note.
+resources:
+  - title: Readings
+    blurb: Papers and background reading for the lectures.
+    links: []
+  - title: Tools
+    blurb: Software for building feeds, running studies, and analyzing data.
+    links: []
+  - title: Experiment platforms
+    blurb: Where to host and run online experiments.
+    links: []
+  - title: Statistics & writing
+    blurb: Analysis guides and help with the research write-up.
+    links: []
