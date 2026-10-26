@@ -6,7 +6,7 @@
 | **Time** | Thursdays, 14:50-16:20 |
 | **Language** | English |
 | **Duration** | 15.10.2026 - 15.03.2027 |
-| **Location** | BZW/A255 (default) or on Zoom (TBA in previous week) |
+| **Location** | BZW/A255 (default) or on Zoom (if announced) |
 | **Assessment** | Presentation & Research write-up |
 
 ## Course Description
