@@ -85,6 +85,7 @@ A section with `links: []` shows "Curated links coming soon".
 
 - Add one `- label: …` block per link, indented under `links:`. Delete a block to remove a link.
 - Put a `label` in quotes if it contains a colon: `label: "Part 1: Basics"`.
+- **Link a PDF:** upload it with **Add file → Upload files** into the `resources/` folder, then use `url: resources/file-name.pdf`. It opens in the browser in a new tab. Only `.pdf` files in `resources/` are published.
 - **Add a section:** copy a whole `- title: …` block and change the text. Sections appear in the order they are listed.
 - **Remove a section:** delete its whole block.
 - "Choosing a project" is not in this file. It comes from [`syllabus.md`](../syllabus.md).
