@@ -10,47 +10,9 @@ Over two semesters, students in groups of 3-4 will develop and conduct an experi
 4. Writing a research report (i.e. mini scientific paper) consisting of four sections:
    - Introduction, Methods, Results, Discussion (and references).
 
-## Instructors
-
-Kamil Fuławka is a computational psychologist who studies decision-making. His research examines the adaptive and maladaptive roles of emotions and heuristics, as well as the dynamics of decision processes. His work combines computational modeling, behavioral and process-tracing experiments, and automated analysis of subjective reports using large language models.
-
-Bao T. Truong is trained in network science and informatics and studies how digital platforms shape people’s information environments: what they see, how they interpret it, and how they can influence it. Her work examines how ranking, labels, feedback signals, user controls, and community-based context affect attention, trust, sharing, and decision-making.
-
 ## Schedule
 
-The course runs for two semesters (about four hours per week), with an in-class session every **Thursday**.
-
-**Semester 1 (15.10.2026–28.01.2027)** introduces algorithmic curation and experimental research. Alongside the lectures, students develop research questions, study designs, and materials. From 28.01.2027 to 04.03.2027 students work independently.
-
-**Semester 2** focuses on running studies, analyzing data, and interpreting and presenting results.
-
-### Semester 1 Schedule (Tentative)
-
-<!-- Generated from schedule.yml by scripts/build_site.py --write-syllabus. Edit schedule.yml, not this table. -->
-
-<!-- SCHEDULE_TABLE_START -->
-| Dates | Lead | Focus |
-|---|---|---|
-| 15.10.2026 | / | Course introduction |
-| 22.10.2026 – 05.11.2026 | Bao | Theoretical background on algorithmic curation (Lectures 1–3) |
-| 12.11.2026 – 26.11.2026 | Kamil | Experiments & Operationalization --- why, what, and how (Lectures 4-6) |
-| 03.12.2026 | / | Checkpoints and brainstorming; topic and mentor selection; 90-minute group mentoring sessions |
-| 10.12.2026 | / | Presentation of research proposal |
-| 17.12.2026 | / | Optional mentoring session & Submission of Intro draft |
-| 07.01.2027 – 21.01.2027 | / | Mentoring sessions |
-| 21.01.2027 | / | Submission of Methods draft |
-| 28.01.2027 | / | Presentation of final research proposal |
-| 29.01.2027 – 04.03.2027 | / | Independent working time |
-| 15.03.2027 (TBC in class) | / | Submission of final write-up (Intro & Methods) |
-<!-- SCHEDULE_TABLE_END -->
-
-### Lectures 1–3: Algorithmic Curation
-
-These lectures provide the domain knowledge to inform students’ research questions.
-
-1. **What does an algorithmically curated feed do?**
-2. **Measurements & Effects of curation** — credibility, diversity, information environments, feedback loops, and user control.
-3. **Literature review** — key studies in the field.
+See the [course schedule](https://btrantruong.github.io/algo-exp-research-course/#schedule) for dates, lectures, and deadlines.
 
 ## Grading 
 **First semester concludes with fully developed Introduction and Methods sections of the research report.**
