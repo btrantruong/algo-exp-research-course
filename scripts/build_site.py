@@ -48,6 +48,7 @@ TYPE_LABEL = {
     "break": "Break",
     "independent": "Independent work",
 }
+NEW_TAB = ' target="_blank" rel="noopener"'  # PDFs open in the browser viewer, not as downloads
 UPCOMING_TYPES = {"intro", "lecture", "mentoring", "presentation", "deadline"}
 
 
@@ -181,13 +182,13 @@ def publish_materials(row: dict) -> list[tuple[str, str, str]]:
     for name in [slides] if isinstance(slides, str) else slides:
         src = ROOT / "slides" / name
         if not src.exists():
-            print(f"warning: lecture {n}: missing slides/{name}", file=sys.stderr)
+            print(f"warning: lecture {n}: missing slides/{name} (run scripts/slides_to_pdf.py)", file=sys.stderr)
             continue
         dst = OUT / "slides" / name
         dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(src, dst)
         ext = src.suffix.lstrip(".").upper()
-        links.append(("Slides", f"slides/{name}", f"{ext} download · {src.stat().st_size / 1e6:.1f} MB"))
+        links.append(("Slides", f"slides/{name}", f"{ext} · {src.stat().st_size / 1e6:.1f} MB"))
     return links
 
 
@@ -200,7 +201,7 @@ def lecture_details(row: dict) -> str:
     has_materials = bool(lec and (lec.get("materials") or lec.get("slides")))
     if row["released"] and has_materials:
         items = "".join(
-            f'<li><a href="{esc(href)}"><strong>{esc(label)}</strong>'
+            f'<li><a href="{esc(href)}"{NEW_TAB if href.endswith(".pdf") else ""}><strong>{esc(label)}</strong>'
             f'{f"<span>{esc(desc)}</span>" if desc else ""}</a></li>'
             for label, href, desc in publish_materials(row)
         )

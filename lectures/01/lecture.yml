@@ -4,7 +4,7 @@ summary: How a ranking objective decides what a feed shows, and what it rewards 
 # Materials appear on the site automatically the day after the lecture date.
 # Set hide: true to keep them off the site by hand.
 hide: false
-slides: 01.pptx          # file in slides/
+slides: 01.pdf           # file in slides/ (make it with scripts/slides_to_pdf.py)
 materials:               # files in this folder; listed: false copies a file without listing it
   - file: feed-ranking-demo.html
     label: Feed Ranking Interactive
