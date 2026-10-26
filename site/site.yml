@@ -30,12 +30,8 @@ resources:
     links:
       - label: How to read academic papers
         url: resources/how-to-read-academic-papers.pdf
-  - title: Tools
-    blurb: Software for building feeds, running studies, and analyzing data.
-    links: []
-  - title: Experiment platforms
-    blurb: Where to host and run online experiments.
-    links: []
+      - label: Understanding Social Media Recommendation Algorithms (Narayanan, 2023)
+        url: https://knightcolumbia.org/content/understanding-social-media-recommendation-algorithms
   - title: Statistics
     blurb: Analysis guides and statistics help.
     links: []
