@@ -3,6 +3,7 @@
 materials/
 build/
 .venv/
-# slides stay local until released: add an exception per file after the lecture
+# slides stay local until released: after a lecture, add an exception for its PDF (the site publishes the PDF)
 slides/*
 !slides/01.pptx
+!slides/01.pdf
