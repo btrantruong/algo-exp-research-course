@@ -312,7 +312,7 @@ def render_facts(facts: list[tuple[str, str]], groups: list[dict]) -> str:
     return f'<div class="facts">{"".join(blocks)}</div>'
 
 
-def render_home(readme: dict, announcements: list, rows: list[dict], cfg: dict) -> str:
+def render_home(readme: dict, announcements: list, cfg: dict) -> str:
     facts = render_facts(readme["facts"], cfg.get("fact_groups", []))
 
     latest = ""
@@ -329,24 +329,12 @@ def render_home(readme: dict, announcements: list, rows: list[dict], cfg: dict) 
         )
         archive = f'<details class="card archive"><summary>Earlier announcements</summary>{items}</details>'
 
-    nxt = next((r for r in rows if r["is_next"]), None)
-    next_html = ""
-    if nxt:
-        href = f'#lecture-{nxt["lecture"]}' if nxt["type"] == "lecture" else "#schedule"
-        label = f'Lecture {nxt["lecture"]}' if nxt["type"] == "lecture" else TYPE_LABEL[nxt["type"]]
-        next_html = (
-            '<section class="card next-up"><p class="eyebrow">Next session</p>'
-            f'<h2>{esc(nxt["title"] or nxt["milestone"])}</h2><p class="muted">{esc(label)} · '
-            f'{DAYS[nxt["date"].weekday()]} {fmt_date(nxt["date"])}</p>'
-            f'<a class="button" href="{href}">See details</a></section>'
-        )
-
     return (
         f'<h1>{esc(readme["title"])}</h1>'
         f'<div class="lede">{md(readme["description"])}'
         '<p class="lede-link"><a href="#syllabus">Full syllabus →</a></p></div>'
         f'{facts}'
-        f'<div class="two-col"><div>{latest}{archive}</div><div>{next_html}</div></div>'
+        f'{latest}{archive}'
     )
 
 
@@ -434,7 +422,7 @@ def main() -> None:
         "short_title": esc(cfg["short_title"]),
         "css": (SITE / "style.css").read_text(encoding="utf-8"),
         "js": (SITE / "app.js").read_text(encoding="utf-8"),
-        "home": render_home(readme, announcements, rows, cfg),
+        "home": render_home(readme, announcements, cfg),
         "syllabus": render_syllabus(),
         "schedule": render_schedule(rows),
         "resources": render_resources(syllabus, cfg),
