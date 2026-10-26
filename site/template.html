@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Course site: understand the impact of algorithmic curation through experimentation.">
+  <title>{{page_title}}</title>
+  <style>
+{{css}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#home"><span class="dot" aria-hidden="true"></span>{{short_title}}</a>
+      <nav aria-label="Sections">
+        <a href="#home" data-tab="home">Home</a>
+        <a href="#schedule" data-tab="schedule">Schedule</a>
+        <a href="#resources" data-tab="resources">Resources</a>
+        <a href="#instructors" data-tab="instructors">Instructors</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div data-panel="home">{{home}}</div>
+    <div data-panel="schedule">{{schedule}}</div>
+    <div data-panel="resources">{{resources}}</div>
+    <div data-panel="instructors">{{instructors}}</div>
+    <div data-panel="syllabus">{{syllabus}}</div>
+  </main>
+
+  <footer class="shell site-footer">
+    <span>Built {{built}}</span>
+    <a href="{{repo}}">Source on GitHub ↗</a>
+  </footer>
+  <script>
+{{js}}
+  </script>
+</body>
+</html>

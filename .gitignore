@@ -1,0 +1,8 @@
+.DS_Store
+*/.DS_Store
+materials/
+build/
+.venv/
+# slides stay local until released: add an exception per file after the lecture
+slides/*
+!slides/01.pptx

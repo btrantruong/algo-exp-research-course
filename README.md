@@ -19,6 +19,6 @@ This practical seminar focuses on the impact of algorithmic curation, with a par
 > **Lecture 1 (22.10.2026) - Intro to algorithmically curated feeds**
 >
 >
-> - Tomorrow's class will be - **on Zoom** (link can be found in my announcement email)
-> - Please read the [full syllabus](https://github.com/btrantruong/algo-exp-praxis/blob/main/syllabus.md). 
+> - This lecture will be held **on Zoom** (link can be found in my announcement email)
+> - Please read the [full syllabus](https://github.com/btrantruong/algo-exp-research-course/blob/main/syllabus.md). 
 <!-- LATEST_ANNOUNCEMENT_END -->

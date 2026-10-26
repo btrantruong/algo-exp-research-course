@@ -1,0 +1,140 @@
+# Calendar skeleton for the course site. One entry per event, sorted by date at build time.
+# Lecture content (title, summary, materials, hide) lives in lectures/NN/lecture.yml,
+# merged in by the `lecture:` number.
+#
+# Fields
+#   date      ISO date (required)
+#   end       ISO date, for multi-day bands such as independent work
+#   type      intro | lecture | mentoring | presentation | break | independent
+#             (deadline = a milestone-only date with no session)
+#   title     the session, shown in the Session column (lecture rows take it from lecture.yml)
+#   milestone a deadline or submission on this date, shown in the Milestone column
+#   desc      optional one-line detail
+#   note      optional short tag, e.g. "TBC"
+#   lead      who leads the session; "/" for none
+#   location  room | zoom   (default: room)
+#   lecture   lecture number, links the row to lectures/NN/lecture.yml
+#   group     rows sharing a group id collapse into one line of the syllabus table
+#   focus     text of that syllabus line (set on the first row of a group)
+
+rows:
+  - date: 2026-10-15
+    type: intro
+    title: Course introduction
+    lead: "/"
+    group: intro
+    focus: Course introduction
+
+  - date: 2026-10-22
+    type: lecture
+    lecture: 1
+    lead: Bao
+    location: zoom
+    group: curation
+    focus: Theoretical background on algorithmic curation (Lectures 1–3)
+  - date: 2026-10-29
+    type: lecture
+    lecture: 2
+    lead: Bao
+    group: curation
+  - date: 2026-11-05
+    type: lecture
+    lecture: 3
+    lead: Bao
+    group: curation
+
+  - date: 2026-11-12
+    type: lecture
+    lecture: 4
+    lead: Kamil
+    title: Experiments & operationalization
+    desc: Specific topic to be announced.
+    group: experiments
+    focus: Experiments & Operationalization --- why, what, and how (Lectures 4-6)
+  - date: 2026-11-19
+    type: lecture
+    lecture: 5
+    lead: Kamil
+    title: Experiments & operationalization
+    desc: Specific topic to be announced.
+    group: experiments
+  - date: 2026-11-26
+    type: lecture
+    lecture: 6
+    lead: Kamil
+    title: Experiments & operationalization
+    desc: Specific topic to be announced.
+    group: experiments
+
+  - date: 2026-12-03
+    type: mentoring
+    title: Checkpoints and brainstorming
+    desc: Topic and mentor selection; 90-minute group mentoring sessions.
+    lead: "/"
+    group: checkpoint
+    focus: Checkpoints and brainstorming; topic and mentor selection; 90-minute group mentoring sessions
+
+  - date: 2026-12-10
+    type: presentation
+    title: Presentation of research proposal
+    lead: "/"
+    group: proposal
+    focus: Presentation of research proposal
+
+  - date: 2026-12-17
+    type: mentoring
+    title: Optional mentoring session
+    milestone: Submission of Intro draft
+    lead: "/"
+    group: intro-draft
+    focus: Optional mentoring session & Submission of Intro draft
+
+  - date: 2026-12-24
+    type: break
+    title: No class
+    note: TBC
+  - date: 2026-12-31
+    type: break
+    title: No class
+    note: TBC
+
+  - date: 2027-01-07
+    type: mentoring
+    title: Mentoring sessions
+    lead: "/"
+    group: mentoring
+    focus: Mentoring sessions
+  - date: 2027-01-14
+    type: mentoring
+    title: Mentoring sessions
+    lead: "/"
+    group: mentoring
+  - date: 2027-01-21
+    type: mentoring
+    title: Mentoring sessions
+    milestone: Submission of Methods draft
+    lead: "/"
+    group: mentoring
+
+  - date: 2027-01-28
+    type: presentation
+    title: Presentation of final research proposal
+    lead: "/"
+    group: final-proposal
+    focus: Presentation of final research proposal
+
+  - date: 2027-01-29
+    end: 2027-03-04
+    type: independent
+    title: Independent working time
+    lead: "/"
+    group: independent
+    focus: Independent working time
+
+  - date: 2027-03-15
+    type: deadline
+    milestone: Submission of final write-up (Intro & Methods)
+    note: TBC in class
+    lead: "/"
+    group: final-writeup
+    focus: Submission of final write-up (Intro & Methods)

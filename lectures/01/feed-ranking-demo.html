@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="An offline classroom demo of a simple feed-ranking model.">
+  <title>Feed Ranking Lab</title>
+  <style>
+    :root {
+      --ink: #10263a;
+      --muted: #5c7184;
+      --paper: #f8fbfd;
+      --card: #ffffff;
+      --line: #d9e5ec;
+      --teal: #006d77;
+      --teal-deep: #004f57;
+      --coral: #e76f51;
+      --gold: #f4a261;
+      --shadow: 0 16px 45px rgba(16, 38, 58, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+
+    body {
+      min-width: 320px;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 6% 0%, rgba(42, 157, 143, .15), transparent 29rem),
+        radial-gradient(circle at 100% 19%, rgba(244, 162, 97, .15), transparent 25rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    .shell { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; padding: clamp(2rem, 5vw, 4.75rem) 0; }
+    .eyebrow { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 .9rem; color: var(--teal-deep); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow::before { width: .65rem; height: .65rem; border-radius: 50%; background: var(--coral); content: ""; }
+    h1, h2, p { margin-top: 0; }
+    h1 { max-width: 760px; margin-bottom: .75rem; font-size: clamp(1.4rem, 2vw, 1.8rem); letter-spacing: -.055em; line-height: .98; }
+    .intro { max-width: 690px; margin-bottom: clamp(2rem, 4vw, 3.25rem); color: var(--muted); font-size: clamp(1rem, 1.8vw, 1.18rem); }
+    .formula { display: inline-block; margin: 0 .1em; padding: .08em .4em; border-radius: .35em; color: var(--teal-deep); background: #dff3f1; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; font-weight: 700; white-space: nowrap; }
+    .lab { display: grid; grid-template-columns: minmax(280px, .82fr) minmax(0, 1.18fr); gap: 1.25rem; align-items: start; }
+    .control-panel, .feed-panel { border: 1px solid var(--line); border-radius: 1.25rem; background: rgba(255, 255, 255, .88); box-shadow: var(--shadow); }
+    .control-panel { padding: clamp(1.25rem, 3vw, 2rem); }
+    h2 { margin-bottom: .45rem; font-size: 1.25rem; letter-spacing: -.025em; }
+    .panel-copy { margin-bottom: 1.6rem; color: var(--muted); font-size: .94rem; }
+    .weight-display { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .8rem; }
+    .weight-display span:first-child { font-size: .83rem; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; }
+    output { color: var(--teal-deep); font-size: 2rem; font-weight: 800; letter-spacing: -.06em; }
+    input[type="range"] { width: 100%; height: 1rem; margin: .3rem 0 .4rem; accent-color: var(--teal); cursor: pointer; }
+    input[type="range"]:focus-visible { outline: 3px solid rgba(231, 111, 81, .55); outline-offset: 4px; }
+    .ends { display: flex; justify-content: space-between; color: var(--muted); font-size: .8rem; font-weight: 650; }
+    .explanation { margin: 1.7rem 0 0; padding: 1rem 1rem 1rem 1.1rem; border-left: 4px solid var(--gold); border-radius: 0 .65rem .65rem 0; background: #fff8ee; color: #5c4836; font-size: .91rem; }
+    .teaching-notes { margin-top: 1.5rem; padding: .75rem 1rem .75rem 2rem; border: 1px solid var(--line); border-radius: .9rem; background: var(--card); }
+    .note { padding: .2rem 0 .2rem .1rem; font-size: .85rem; }
+    .note::marker { color: var(--coral); }
+    .note strong { color: var(--teal-deep); }
+    .feed-panel { overflow: hidden; }
+    .feed-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.4rem clamp(1.25rem, 3vw, 2rem) 1.15rem; border-bottom: 1px solid var(--line); }
+    .feed-heading h2 { margin: 0; }
+    .ranking-status { color: var(--muted); font-size: .8rem; font-weight: 700; white-space: nowrap; }
+    .posts { display: grid; gap: .75rem; padding: 1rem; margin: 0; list-style: none; }
+    .post { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr) auto; gap: .85rem; align-items: center; padding: 1rem; border: 1px solid var(--line); border-radius: .9rem; background: var(--card); transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease; }
+    .post:hover { transform: translateY(-2px); border-color: #b3d7d6; box-shadow: 0 8px 22px rgba(16, 38, 58, .08); }
+    .rank { display: grid; width: 2.45rem; height: 2.45rem; place-items: center; border-radius: 50%; color: var(--teal-deep); background: #dff3f1; font-size: .82rem; font-weight: 850; }
+    .post-title { margin: 0 0 .17rem; font-size: 1rem; font-weight: 800; letter-spacing: -.015em; }
+    .features { display: flex; flex-wrap: wrap; gap: .38rem .75rem; margin: 0; color: var(--muted); font-size: .82rem; }
+    .feature-value { color: var(--ink); font-weight: 800; }
+    .score { min-width: 4.9rem; padding: .45rem .6rem; border-radius: .6rem; color: var(--teal-deep); background: #e5f5f3; text-align: center; }
+    .score-label { display: block; margin-bottom: .08rem; color: var(--muted); font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .score-value { font-size: 1.2rem; font-weight: 850; letter-spacing: -.04em; }
+    .footer-note { margin: 1.3rem 0 0; color: var(--muted); font-size: .82rem; text-align: center; }
+    .footer-note a { color: var(--teal-deep); font-weight: 800; }
+    .lesson-nav { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0 0 1.5rem; }
+    .lesson-nav a { padding: .3rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--teal-deep); background: rgba(255,255,255,.72); font-size: .76rem; font-weight: 800; text-decoration: none; }
+    .lesson-nav a[aria-current="page"] { border-color: var(--teal); color: #fff; background: var(--teal); }
+    .lesson-nav a:focus-visible { outline: 3px solid rgba(231,111,81,.55); outline-offset: 3px; }
+
+    @media (max-width: 760px) { .lab { grid-template-columns: 1fr; } }
+    @media (max-width: 430px) { .shell { width: min(100% - 1.15rem, 1120px); } .post { grid-template-columns: 2.3rem minmax(0, 1fr); gap: .7rem; } .score { grid-column: 2; justify-self: start; min-width: 0; } .feed-heading { align-items: start; flex-direction: column; gap: .25rem; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <nav class="lesson-nav" aria-label="Lesson pages">
+      <a href="feed-ranking-demo.html" aria-current="page">1. Ranking</a>
+      <a href="feed-ranking-consequences.html">2. Features</a>
+      <a href="feed-ranking-model.html">3. Predictions</a>
+    </nav>
+    <p class="eyebrow">Classroom interactive</p>
+    <h1>What should appear first in the feed?</h1>
+    <p class="intro">Explore a simple ranking model that balances how relevant a post is to someone with how popular it is overall. Each score follows <span class="formula">w × relevance + (1 − w) × popularity</span>.</p>
+
+    <section class="lab" aria-label="Interactive feed-ranking demonstration">
+      <aside class="control-panel" aria-label="Ranking controls">
+        <p class="panel-copy">Drag the slider and watch the feed re-rank in real time.</p>
+        <div class="weight-display"><span>Relevance weight (w)</span><output id="weight-output" for="weight-slider">0.7</output></div>
+        <input id="weight-slider" type="range" min="0" max="1" step="0.1" value="0.7" aria-describedby="weight-guidance">
+        <div class="ends" aria-hidden="true"><span>0 · popularity-first</span><span>1 · relevance-first</span></div>
+        <p class="explanation" id="weight-guidance"><strong id="goal-label">At 0.7, relevance leads.</strong><span id="goal-text"> Each post still gets some credit for popularity.</span></p>
+        <ul class="teaching-notes" aria-label="Teaching labels">
+          <li class="note"><strong>Relevance:</strong> how well a post matches this person’s interests or needs.</li>
+          <li class="note"><strong>Popularity:</strong> how much engagement a post receives across the network.</li>
+          <li class="note"><strong>Discussion prompt:</strong> What behavior might this formula unintentionally reward?</li>
+        </ul>
+      </aside>
+
+      <section class="feed-panel" aria-labelledby="feed-title" aria-live="polite">
+        <div class="feed-heading"><div><p class="eyebrow">Ranked output</p><h2 id="feed-title">Your personalized feed</h2></div><span class="ranking-status" id="ranking-status">Sorted by score</span></div>
+        <ol class="posts" id="posts"></ol>
+      </section>
+    </section>
+    <p class="footer-note">Scores are calculated from fixed features; only the model’s weight changes.<br><a href="feed-ranking-consequences.html">Next: inspect post features →</a></p>
+  </main>
+
+  <script>
+    (() => {
+      const posts = [
+        { id: "A", title: "Post A", relevance: 9, popularity: 2 },
+        { id: "B", title: "Post B", relevance: 7, popularity: 6 },
+        { id: "C", title: "Post C", relevance: 4, popularity: 10 },
+        { id: "D", title: "Post D", relevance: 6, popularity: 4 }
+      ];
+      const slider = document.querySelector("#weight-slider");
+      const output = document.querySelector("#weight-output");
+      const list = document.querySelector("#posts");
+      const status = document.querySelector("#ranking-status");
+      const goalLabel = document.querySelector("#goal-label");
+      const goalText = document.querySelector("#goal-text");
+      const score = (post, weight) => weight * post.relevance + (1 - weight) * post.popularity;
+
+      function goalCopy(weight) {
+        if (weight === 0) return ["At 0.0, popularity decides.", " Highly engaging posts rise to the top."];
+        if (weight === 1) return ["At 1.0, relevance decides.", " The feed ignores popularity entirely."];
+        if (weight > .5) return [`At ${weight.toFixed(1)}, relevance leads.`, " Each post still gets some credit for popularity."];
+        if (weight < .5) return [`At ${weight.toFixed(1)}, popularity leads.`, " Each post still gets some credit for relevance."];
+        return ["At 0.5, the signals are balanced.", " Relevance and popularity contribute equally."];
+      }
+
+      function render() {
+        const weight = Number(slider.value);
+        const ranked = posts.map(post => ({ ...post, score: score(post, weight) })).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+        const [label, detail] = goalCopy(weight);
+        output.value = weight.toFixed(1);
+        output.textContent = weight.toFixed(1);
+        goalLabel.textContent = label;
+        goalText.textContent = detail;
+        status.textContent = `Sorted by score · w = ${weight.toFixed(1)}`;
+        list.replaceChildren(...ranked.map((post, index) => {
+          const item = document.createElement("li");
+          item.className = "post";
+          item.innerHTML = `<span class="rank" aria-label="Rank ${index + 1}">#${index + 1}</span><div><p class="post-title">${post.title}</p><p class="features"><span>Relevance <span class="feature-value">${post.relevance}</span></span><span>Popularity <span class="feature-value">${post.popularity}</span></span></p></div><div class="score" aria-label="Score ${post.score.toFixed(1)}"><span class="score-label">Score</span><span class="score-value">${post.score.toFixed(1)}</span></div>`;
+          return item;
+        }));
+      }
+      slider.addEventListener("input", render);
+      render();
+    })();
+  </script>
+</body>
+</html>
