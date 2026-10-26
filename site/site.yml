@@ -1,6 +1,11 @@
 short_title: Understanding Algorithmic Curation Through Experimentation
 repo: https://github.com/btrantruong/algo-exp-research-course
 
+# Linked at the end of the reading note on the Schedule tab.
+reading_guide:
+  label: How to read academic papers
+  url: resources/how-to-read-academic-papers.pdf
+
 # Key facts from the README table, grouped for display.
 fact_groups:
   - title: Course
@@ -22,7 +27,9 @@ instructors:
 resources:
   - title: Readings
     blurb: Papers and background reading for the lectures.
-    links: []
+    links:
+      - label: How to read academic papers
+        url: resources/how-to-read-academic-papers.pdf
   - title: Tools
     blurb: Software for building feeds, running studies, and analyzing data.
     links: []

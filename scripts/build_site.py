@@ -9,6 +9,7 @@ Sources
     schedule.yml        calendar skeleton (one row per event)
     lectures/NN/lecture.yml   lecture content, merged into schedule rows by lecture number
     site/site.yml       instructor bios and links, resource sections
+    resources/*.pdf    published as-is; link them from site/site.yml
     site/template.html, site/style.css, site/app.js
 
 Lecture materials (demos + slides) are published only the day after the lecture
@@ -275,14 +276,19 @@ def render_row(row: dict) -> str:
     )
 
 
-def render_schedule(rows: list[dict]) -> str:
+def render_schedule(rows: list[dict], cfg: dict) -> str:
+    guide = cfg.get("reading_guide")
+    guide_html = (
+        f' New to reading papers? See <a href="{esc(guide["url"])}"{NEW_TAB}>{esc(guide["label"])}</a>.' if guide else ""
+    )
     return (
         '<h1>Schedule</h1>'
         '<p class="intro">The schedule will be adjusted as we go, so please check it regularly for '
         "updates. Slides and demos are posted after each session.</p>"
         '<p class="intro"><strong>Note:</strong> Students are expected to spend 4–6 h/week outside of lecture time. Reading assignments should be completed before class. '
         "These won’t be graded but there may be a quiz on the reading material, and students are "
-        "expected to participate in class discussions about the materials.</p>"
+        "expected to participate in class discussions about the materials."
+        f"{guide_html}</p>"
         '<div class="timeline-head" aria-hidden="true"><span>Date</span><span>Session</span>'
         "<span>Milestone</span></div>"
         f'<ol class="timeline">{"".join(render_row(r) for r in rows)}</ol>'
@@ -362,7 +368,8 @@ def render_resources(syllabus: list, cfg: dict) -> str:
             items = []
             for link in links:
                 note = f" — {esc(link['note'])}" if link.get("note") else ""
-                items.append(f'<li><a href="{esc(link["url"])}">{esc(link["label"])}</a>{note}</li>')
+                tab = NEW_TAB if link["url"].endswith(".pdf") else ""
+                items.append(f'<li><a href="{esc(link["url"])}"{tab}>{esc(link["label"])}</a>{note}</li>')
             body = "<ul>" + "".join(items) + "</ul>"
         else:
             body = '<p class="pending">Curated links coming soon.</p>'
@@ -424,7 +431,7 @@ def main() -> None:
         "js": (SITE / "app.js").read_text(encoding="utf-8"),
         "home": render_home(readme, announcements, cfg),
         "syllabus": render_syllabus(),
-        "schedule": render_schedule(rows),
+        "schedule": render_schedule(rows, cfg),
         "resources": render_resources(syllabus, cfg),
         "instructors": render_instructors(cfg),
         "repo": esc(cfg["repo"]),
@@ -433,6 +440,9 @@ def main() -> None:
     for key, value in values.items():
         page = page.replace("{{" + key + "}}", value)
     (OUT / "index.html").write_text(page, encoding="utf-8")
+    for pdf in sorted((ROOT / "resources").glob("*.pdf")):
+        (OUT / "resources").mkdir(exist_ok=True)
+        shutil.copy2(pdf, OUT / "resources" / pdf.name)
     print(f"built {OUT.relative_to(ROOT)}/index.html for {today.isoformat()}")
 
 
