@@ -20,5 +20,5 @@ This practical seminar focuses on the impact of algorithmic curation, with a par
 >
 >
 > - This lecture will be held **on Zoom** (link can be found in my announcement email)
-> - Please read the [full syllabus](https://github.com/btrantruong/algo-exp-research-course/blob/main/syllabus.md). 
+> - Please read the [full syllabus](https://btrantruong.github.io/algo-exp-research-course/#syllabus). 
 <!-- LATEST_ANNOUNCEMENT_END -->
