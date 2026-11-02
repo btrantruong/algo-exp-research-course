@@ -83,6 +83,8 @@ A section with `links: []` shows "Curated links coming soon".
         url: https://example.org/other
 ```
 
+- **Abstracts and sub-headings:** a link can also have `abstract:` (shown under the title) and may leave out `url:` (plain-text title).
+  To put links under a sub-heading, use `groups:` (each with a `title` and `links`) next to or instead of `links:`.
 - Add one `- label: …` block per link, indented under `links:`. Delete a block to remove a link.
 - Put a `label` in quotes if it contains a colon: `label: "Part 1: Basics"`.
 - **Link a PDF:** upload it with **Add file → Upload files** into the `resources/` folder, then use `url: resources/file-name.pdf`. It opens in the browser in a new tab. Only `.pdf` files in `resources/` are published.

@@ -344,12 +344,41 @@ def render_home(readme: dict, announcements: list, cfg: dict) -> str:
     )
 
 
-def accordion(title: str, blurb: str, body: str) -> str:
+def accordion(title: str, blurb: str, body: str, anchor: str = "") -> str:
+    id_attr = f' id="{esc(anchor)}"' if anchor else ""
     return (
-        '<details class="res"><summary>'
+        f'<details class="res"{id_attr}><summary>'
         f'<span class="res-title">{esc(title)}</span><span class="res-blurb">{esc(blurb)}</span></summary>'
         f'<div class="card doc res-body">{body}</div></details>'
     )
+
+
+def render_links(links: list) -> str:
+    """A link with an `abstract` is a collapsible paper: the title toggles the abstract and the link.
+    `url` is optional (without it the note, if any, is shown alone); links without an abstract are plain list items."""
+    if not links:
+        return ""
+    items = []
+    for link in links:
+        label = esc(link["label"])
+        note = f" — {esc(link['note'])}" if link.get("note") else ""
+        tab = NEW_TAB if (link.get("url") or "").endswith(".pdf") else ""
+        anchor = f'<a href="{esc(link["url"])}"{tab}>' if link.get("url") else ""
+        if not link.get("abstract"):
+            items.append(f"<li>{anchor}{label}{'</a>' if anchor else ''}{note}</li>")
+            continue
+        if anchor:
+            read = f'<p class="paper-link">{anchor}Read the paper</a>{note}</p>'
+        elif link.get("note"):
+            read = f'<p class="paper-link">{esc(link["note"])}</p>'
+        else:
+            read = ""
+        items.append(
+            f'<li><details class="paper"><summary>{label}</summary><div class="paper-body">'
+            f'<p class="abstract">{esc(link["abstract"])}</p>{read}</div></details></li>'
+        )
+    cls = ' class="papers"' if any(link.get("abstract") for link in links) else ""
+    return f"<ul{cls}>" + "".join(items) + "</ul>"
 
 
 def render_resources(syllabus: list, cfg: dict) -> str:
@@ -364,16 +393,17 @@ def render_resources(syllabus: list, cfg: dict) -> str:
     ]
     for sec in cfg.get("resources", []):
         links = sec.get("links") or []
-        if links:
-            items = []
-            for link in links:
-                note = f" — {esc(link['note'])}" if link.get("note") else ""
-                tab = NEW_TAB if link["url"].endswith(".pdf") else ""
-                items.append(f'<li><a href="{esc(link["url"])}"{tab}>{esc(link["label"])}</a>{note}</li>')
-            body = "<ul>" + "".join(items) + "</ul>"
+        groups = sec.get("groups") or []
+        anchor = re.sub(r"[^a-z0-9]+", "-", sec["title"].lower()).strip("-")
+        if links or groups:
+            body = render_links(links)
+            for group in groups:
+                # the heading links to its section, e.g. #readings (opens the Resources tab with Readings expanded)
+                heading = f'<a href="#{anchor}">{esc(group["title"])}</a>'
+                body += f"<h3>{heading}</h3>" + render_links(group.get("links") or [])
         else:
             body = '<p class="pending">Curated links coming soon.</p>'
-        rows.append(accordion(sec["title"], sec.get("blurb", ""), body))
+        rows.append(accordion(sec["title"], sec.get("blurb", ""), body, anchor))
     return (
         '<h1>Resources</h1>'
         '<p class="intro">Guidance for your project, plus curated links and references.</p>'

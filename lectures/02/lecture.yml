@@ -2,3 +2,4 @@ lecture: 2
 title: Problem space & research on social media algorithmic curation
 summary: Credibility, diversity, information environments, feedback loops, and user control.
 hide: false
+slides: 02.pdf           # file in slides/ (make it with scripts/slides_to_pdf.py)

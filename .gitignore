@@ -7,4 +7,5 @@ build/
 slides/*
 !slides/01.pptx
 !slides/01.pdf
+!slides/02.pdf
 todo*
