@@ -4,10 +4,10 @@
 
 All readings are available on the course portal or in the `readings` folder of this repo.
 
-## Lecture 3 (05.11.2026) - Literative review
+## Lecture 3 (05.11.2026) - Literature review
 
 - This lecture will be held **in person** 
-- Please choose one paper from the [reading list / Social media effects studies](https://btrantruong.github.io/algo-exp-research-course/#readings) and read it closely. **Be prepared to discuss about the chosen paper in class**. If you need help formulate the summry, see [How to Read Academic Papers / Takeaways](http://btrantruong.github.io/algo-exp-research-course/resources/how-to-read-academic-papers.pdf) 
+- Please choose one paper from the [reading list / Social media effects studies](https://btrantruong.github.io/algo-exp-research-course/#readings) and read it closely. **Be prepared to discuss about the chosen paper in class**. If you need help formulate the summary, see [How to Read Academic Papers / Takeaways](http://btrantruong.github.io/algo-exp-research-course/resources/how-to-read-academic-papers.pdf) 
 
 ## Lecture 2 (29.10.2026) - Problem space & research on social media algorithmic curation 
 
