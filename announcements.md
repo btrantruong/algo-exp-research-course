@@ -4,6 +4,14 @@
 
 All readings are available on the course portal or in the `readings` folder of this repo.
 
+## Lecture 4 (12.11.2026)
+
+- This lecture will be held **in person** by Kamil
+- Homework: 
+    - Form groups
+    - Mandatory: please read [Burton, Herzog & Lorenz-Spreen (2026) Simple changes to content curation algorithms affect the beliefs people form in a collaborative filtering experiment](https://dl.acm.org/doi/10.1145/3772318.3790602#sec-3) — trace the study design and identify relevant components (as we did in class) 
+    - Optional: Check out this wonderful paper by [Pagnini et al., 2025. Unexpected events and prosocial behavior: the Batman effect](https://www.nature.com/articles/s44184-025-00171-5) — it might give you some inspirations 
+
 ## Lecture 3 (05.11.2026) - Literature review
 
 - This lecture will be held **in person** 
