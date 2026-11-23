@@ -4,6 +4,12 @@
 
 All readings are available on the course portal or in the `readings` folder of this repo.
 
+## Lecture 6 (26.11.2026) - Opertionalization and experimental design put together
+
+- This lecture will be held **in person** by Kamil
+- Homework: refine operationalizations of the independent and dependent variables. Detailed instructions are prvodied in an email from Kamil sent on Nov 23rd. 
+- We will discuss your projects and provide comments and feedback.
+
 ## Lecture 4 (12.11.2026)
 
 - This lecture will be held **in person** by Kamil
